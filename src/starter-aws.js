@@ -45,7 +45,7 @@ StarterAws.prototype.init = function() {
   this.options.secretAccessKey = args[1];
   this.options.region = args[2];
   this.options.instancesId = args[3].split(',');
-  this.options.start = args[4];
+  this.options.state = args[4];
 
   process.argv = process.argv.concat(args);
 
@@ -54,13 +54,13 @@ StarterAws.prototype.init = function() {
 
 StarterAws.prototype.starter = function(options, next) {
   
-  if (!options.accessKeyId || !options.secretAccessKey || !options.region || !options.instancesId || !options.start)
+  if (!options.accessKeyId || !options.secretAccessKey || !options.region || !options.instancesId || !options.state)
     return next(new Error("missing parameters: <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-instancesId> <state>"));
   
-  console.log('----- instances state forced to  : ' + options.start);
+  console.log('----- instances state forced to  : ' + options.state);
 
   var fn;
-  switch(options.start) {    
+  switch(options.state) {    
     case 'stop':
       fn = this.ec2.stopInstances;
     break;
