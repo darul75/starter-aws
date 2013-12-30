@@ -27,6 +27,7 @@ node starter-aws.js <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-in
 ```javascript
 var starterAws = require('starterAws');
 
+// THIS CALL IS MADE BY DEFAULT, options attributes have to be set, with by state start or stop...
 starterAws.starter(
   {
     accessKeyId: '', 
@@ -43,6 +44,7 @@ starterAws.starter(
 
 or
 
+// OTHER CALL here a start
 starterAws.start(
   {
     accessKeyId: '', 
@@ -53,6 +55,7 @@ starterAws.start(
 
 or
 
+// OTHER CALL here a stop
 starterAws.stop(
   {
     accessKeyId: '', 
@@ -63,6 +66,7 @@ starterAws.stop(
 
 or
 
+// OTHER CALL here a reboot
 starterAws.reboot(
   {
     accessKeyId: '', 
@@ -70,6 +74,21 @@ starterAws.reboot(
   }, 
   function(err, status) {}
 );
+
+// OTHER CALL here a to get status
+starterAws.reboot(function(err, status) {
+
+// status my return:
+/*[ { InstanceId: 'i-53613f18',
+    ImageId: 'ami-c37474b7',
+    InstanceType: 't1.micro',
+    State: 'stopped' },
+  { InstanceId: 'i-98f372d2',
+    ImageId: 'ami-3c5f5748',
+    InstanceType: 't1.micro',
+    State: 'stopped' } ]
+  */  
+});
 ```
 
 ## Options
