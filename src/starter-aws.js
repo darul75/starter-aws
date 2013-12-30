@@ -169,8 +169,8 @@ StarterAws.prototype.daemon = function(options, next) {
 var params = function(options, cb) {
   return [{InstanceIds: options.instancesId}, function(err, data) {
     if (err) {
-      console.log(err);
-      return cb(err);
+      console.log(err.toString());
+      return cb(err.toString());
     }
 
     return cb(null, 'ok');
