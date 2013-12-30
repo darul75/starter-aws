@@ -106,8 +106,6 @@ starterAws.status(function(err, status) {
 ### err
 * `many`  most of time parameters order or missing, easy to figure what is wrong.
 
-~~~
-
 ## License
 
 The MIT License (MIT)
