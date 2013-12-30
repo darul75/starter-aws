@@ -20,7 +20,7 @@ npm install starter-aws
 
 ### Command line
 ```
-node starter-aws.js <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-instancesId> <NO-IP-auth> <NO-IP-hostname> <state>
+node starter-aws.js <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-instancesId> <state>
 ```
 
 ### Application
