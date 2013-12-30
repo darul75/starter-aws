@@ -8,10 +8,18 @@ var AWS = require('aws-sdk');
 function StarterAws() {
 
   this.options = {};
+  this.instancesState = [];
   this.init();
   this.ec2 = new AWS.EC2(this.options);    
 
   this.starter(this.options, function(err, status){    
+    if (err)
+      console.log(err);
+    else
+      console.log(status);
+  });
+
+  this.daemon(this.options, function(err, status){    
     if (err)
       console.log(err);
     else
@@ -101,6 +109,62 @@ StarterAws.prototype.reboot = function(options, next) {
   console.log('----- reboot aws instance(s) ');
 
   this.ec2.rebootInstances.apply(this.ec2, params(options, next));
+
+  return this;
+};
+
+StarterAws.prototype.status = function(options, next) {
+
+  if (!options.accessKeyId || !options.secretAccessKey || !options.region || !options.instancesId)
+    return next(new Error("missing parameters: <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-instancesId>"));
+  
+  console.log('----- status aws instance(s) ');  
+
+  return next(null, this.instancesState);
+};
+
+
+StarterAws.prototype.daemon = function(options, next) {
+  
+  if (!options.accessKeyId || !options.secretAccessKey || !options.region) {    
+    return next(new Error("missing parameters: <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region>"));
+  }
+
+  var this_ = this;
+  var timeoutId = setInterval(function () {
+    console.log('----- getting aws info ');
+    this_.ec2.describeInstances({}, function(err, data) {
+      if (err) {
+        console.log(err);
+        clearInterval(timeoutId);
+        return next(err);
+      }      
+      // instanceId : i-53613f18
+      var reservations = data.Reservations;
+      this_.instancesState = [];
+
+      var i = 0;
+
+      reservations.forEach(function (val, index, array) {
+        var reservation = val;
+        reservation.Instances.forEach(function (val, index, array) {        
+          
+          var state = val.State;
+
+          this_.instancesState.push({
+            InstanceId: val.InstanceId,
+            ImageId: val.ImageId,
+            InstanceType: val.InstanceType,
+            State : val.State.Name
+          });          
+        });              
+      });
+
+      i++;      
+
+      return next(null, this_.instancesState);
+    });
+  }, 3000);
 
   return this;
 };
