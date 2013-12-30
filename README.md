@@ -75,7 +75,7 @@ starterAws.reboot(
 );
 
 // OTHER CALL here a to get status
-starterAws.reboot(function(err, status) {
+starterAws.status(function(err, status) {
 
 // status my return:
 /*[ { InstanceId: 'i-53613f18',
