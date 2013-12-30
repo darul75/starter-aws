@@ -10,6 +10,8 @@ Tired of checking frenquently my AWS instances status, I will soon combined it w
 
 But first can be used at your node application startup, and force a clean start of your AWS instances if needed.
 
+A daemon is started and fetch all your zone instances status every minute ( until now time is hard coded )
+
 ## Install
 
 ~~~
