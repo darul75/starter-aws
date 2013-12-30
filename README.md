@@ -47,8 +47,7 @@ or
 // OTHER CALL here a start
 starterAws.start(
   {
-    accessKeyId: '', 
-    ...
+    accessKeyId: '', secretAccessKey:'', region: '', instancesId: ''
   }, 
   function(err, status) {}
 );
@@ -58,8 +57,7 @@ or
 // OTHER CALL here a stop
 starterAws.stop(
   {
-    accessKeyId: '', 
-    ...
+    accessKeyId: '', secretAccessKey:'', region: '', instancesId: ''
   }, 
   function(err, status) {}
 );
@@ -69,8 +67,7 @@ or
 // OTHER CALL here a reboot
 starterAws.reboot(
   {
-    accessKeyId: '', 
-    ...
+    accessKeyId: '', secretAccessKey:'', region: '', instancesId: ''
   }, 
   function(err, status) {}
 );
