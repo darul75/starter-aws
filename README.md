@@ -12,6 +12,10 @@ But first can be used at your node application startup, and force a clean start 
 
 A daemon is started and fetch all your zone instances status every minute ( until now time is hard coded )
 
+## Demo
+
+http://darul-demo.herokuapp.com/starter
+
 ## Install
 
 ~~~
