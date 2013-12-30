@@ -27,7 +27,7 @@ node starter-aws.js <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-in
 
 ### Application
 ```javascript
-var starterAws = require('starterAws');
+var starterAws = require('starter-aws');
 
 // THIS CALL IS MADE BY DEFAULT, options attributes have to be set, with by state start or stop...
 starterAws.starter(
