@@ -113,10 +113,7 @@ StarterAws.prototype.reboot = function(options, next) {
   return this;
 };
 
-StarterAws.prototype.status = function(options, next) {
-
-  if (!options.accessKeyId || !options.secretAccessKey || !options.region || !options.instancesId)
-    return next(new Error("missing parameters: <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-instancesId>"));
+StarterAws.prototype.status = function(next) {
   
   console.log('----- status aws instance(s) ');  
 
