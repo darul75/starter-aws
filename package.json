@@ -1,7 +1,7 @@
 {
   "name": "starter-aws",
   "description": "NodeJS module for AWS instances easy management : start/stop/reboot",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": {
     "name": "Julien Valéry",
     "email": "darul75@gmail.com"

@@ -59,6 +59,8 @@ StarterAws.prototype.starter = function(options, next) {
   
   console.log('----- instances state forced to  : ' + options.state);
 
+  this.ec2 = new AWS.EC2(options);
+
   var fn;
   switch(options.state) {    
     case 'stop':
@@ -72,7 +74,7 @@ StarterAws.prototype.starter = function(options, next) {
     break;
   }  
 
-  fn.apply(this.ec2, params(options, next));
+  fn.apply(this.ec2, paramsFunctions(options, next));
 
   return this;
 };
@@ -84,7 +86,9 @@ StarterAws.prototype.start = function(options, next) {
   
   console.log('----- starting aws instance(s) ');
 
-  this.ec2.startInstances.apply(this.ec2, params(options, next));
+  this.ec2 = new AWS.EC2(options);
+
+  this.ec2.startInstances.apply(this.ec2, paramsFunctions(options, next));
 
   return this;
 };
@@ -96,7 +100,9 @@ StarterAws.prototype.stop = function(options, next) {
   
   console.log('----- stopping aws instance(s) ');
 
-  this.ec2.stopInstances.apply(this.ec2, params(options, next));
+  this.ec2 = new AWS.EC2(options);
+
+  this.ec2.stopInstances.apply(this.ec2, paramsFunctions(options, next));
 
   return this;
 };
@@ -108,7 +114,9 @@ StarterAws.prototype.reboot = function(options, next) {
   
   console.log('----- reboot aws instance(s) ');
 
-  this.ec2.rebootInstances.apply(this.ec2, params(options, next));
+  this.ec2 = new AWS.EC2(options);
+
+  this.ec2.rebootInstances.apply(this.ec2, paramsFunctions(options, next));
 
   return this;
 };
@@ -166,13 +174,13 @@ StarterAws.prototype.daemon = function(options, next) {
   return this;
 };
 
-var params = function(options, cb) {
-  return [{InstanceIds: options.instancesId}, function(err, data) {
+var paramsFunctions = function(options, cb) {    
+  return [{InstanceIds:options.instancesId.split(',')}, function(err, data) {
     if (err) {
       console.log(err.toString());
       return cb(err.toString());
     }
-
+    
     return cb(null, 'ok');
   }];
 };
