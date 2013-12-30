@@ -1,4 +1,4 @@
-# DynupdateAWS [![NPM version](https://badge.fury.io/js/dynupdate-aws.png)](http://badge.fury.io/js/dynupdate-aws) [![Build Status](https://travis-ci.org/darul75/dynupdate-aws.png?branch=master)](https://travis-ci.org/darul75/dynupdate-aws) [![Total views](https://sourcegraph.com/api/repos/github.com/darul75/dynupdate-aws/counters/views.png)](https://sourcegraph.com/github.com/darul75/dynupdate-aws)
+# StarterAWS [![NPM version](https://badge.fury.io/js/starter-aws.png)](http://badge.fury.io/js/starter-aws) [![Build Status](https://travis-ci.org/darul75/starter-aws.png?branch=master)](https://travis-ci.org/darul75/starter-aws) [![Total views](https://sourcegraph.com/api/repos/github.com/darul75/starter-aws/counters/views.png)](https://sourcegraph.com/github.com/darul75/starter-aws)
 
 **StarterAWS** NodeJS module for AWS instances easy management : start/stop/reboot.
 
@@ -6,7 +6,7 @@
 
 Because ecchymose in the nose. 
 
-Tired of checking frenquently my AWS instances status, I will combined it with some angular directive to make it easier.
+Tired of checking frenquently my AWS instances status, I will soon combined it with one angular directive to make it available in your administration UI.
 
 But first can be used at your node application startup, and force a clean start of your AWS instances if needed.
 
@@ -39,6 +39,36 @@ starterAws.starter(
   // process err
   
   }
+);
+
+or
+
+starterAws.start(
+  {
+    accessKeyId: '', 
+    ...
+  }, 
+  function(err, status) {}
+);
+
+or
+
+starterAws.stop(
+  {
+    accessKeyId: '', 
+    ...
+  }, 
+  function(err, status) {}
+);
+
+or
+
+starterAws.reboot(
+  {
+    accessKeyId: '', 
+    ...
+  }, 
+  function(err, status) {}
 );
 ```
 
