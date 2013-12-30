@@ -1,0 +1,40 @@
+{
+  "name": "starter-aws",
+  "description": "NodeJS module for AWS instances easy management : start/stop/reboot",
+  "version": "0.0.1",
+  "author": {
+    "name": "Julien Valéry",
+    "email": "darul75@gmail.com"
+  },
+  "homepage": "https://github.com/darul75/starter-aws",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/darul75/starter-aws.git"
+  },  
+  "keywords": [    
+    "aws",
+    "ec2",
+    "boot"
+  ],
+  "main": "./lib/starter-aws",
+  "scripts": {
+    "test": "mocha test/*.js"
+  },
+  "engines": {
+    "node": ">=0.6.x"
+  },
+  "dependencies": {
+    "aws-sdk": "2.0.0-rc3"    
+  },
+  "devDependencies": {   
+    "mocha": "",
+    "grunt": "latest",
+    "grunt-contrib-jshint": "latest",
+    "grunt-contrib-uglify": "latest"
+  },
+  "bugs": {
+    "url": "https://github.com/darul75/starter-aws/issues"
+  },
+  "readmeFilename": "README.md",
+  "license": "MIT"
+}
