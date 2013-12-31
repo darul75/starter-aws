@@ -17,8 +17,10 @@ module.exports = function(grunt) {
          '* (c) 2013 Julien VALERY https://github.com/darul75/starter-aws\n' +
          '* License: MIT \n**/\n'
         },         
-        files: {'lib/starter-aws.js': ['src/starter-aws.js']
-       }
+        files: {
+          'lib/starter-aws.js': ['src/starter-aws.js'],
+          'lib/config.js': ['src/config.js']
+        }
       }
     }
 });

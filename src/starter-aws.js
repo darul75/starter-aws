@@ -1,5 +1,6 @@
 // node AWS module
 var AWS = require('aws-sdk');
+var config = require('./config.js');
 
 /* 
  SERVICE COMMAND AWS INSTANCES AWS
@@ -10,11 +11,12 @@ function StarterAws() {
   this.options = { 
     debug: true 
   };
+
+  var this_ = this;
+
   this.instancesState = [];
   this.init();
-  this.ec2 = new AWS.EC2(this.options);  
-
-  var this_ = this;  
+  this.ec2 = new AWS.EC2(this.options);
 
   // FIRST CALL UPDATE STATE
   this.starter(function(err, status){    
@@ -65,7 +67,30 @@ StarterAws.prototype.initCredentials = function(options) {
     return next(new Error("missing parameters: <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-instancesId>"));
 
   // override defaults with passed in options
-    f.extend(this.options, options);   
+  f.extend(this.options, options);
+  this.ec2 = new AWS.EC2(this.options);
+
+  return this;
+};
+
+// INIT FOR APPLICATION WITH CREDENTIALS
+StarterAws.prototype.initFileCredentials = function() {
+
+  var this_ = this;
+
+  // LOAD FROM CREDENTIALS FILE
+  config.init('./credentials.json', function(resp) {
+    if (resp !== 0) {
+        console.log('Could not load config file.');
+        return;
+    }
+
+    f.extend(this_.options, config);
+  });
+  
+  if (!this.options.accessKeyId || !this.options.secretAccessKey || !this.options.region || !this.options.instancesId)
+    return next(new Error("missing parameters: <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-instancesId>"));
+
   this.ec2 = new AWS.EC2(this.options);
 
   return this;
@@ -120,12 +145,12 @@ StarterAws.prototype.daemon = function(next) {
   }
 
   var this_ = this;
-  var timeoutId = setInterval(function () {
+  this.timeoutId = setInterval(function () {
     console.log('----- getting aws info ');
     this_.ec2.describeInstances({}, function(err, data) {
       if (err) {
         console.log('--- daemon stopped because of :' + err);
-        clearInterval(timeoutId);
+        clearInterval(this_timeoutId);
         return next(err);
       }      
       // instanceId : i-53613f18
@@ -145,9 +170,21 @@ StarterAws.prototype.daemon = function(next) {
         });              
       });
 
+      this_.daemonStop();
+
       return next(null, this_.instancesState);
     });
   }, 60000);
+
+  return this;
+};
+
+StarterAws.prototype.daemonStop = function(next) {
+  
+  console.log('----- stopping daemon');
+
+  if (this.timeoutId)
+    clearInterval(this.timeoutId);
 
   return this;
 };
