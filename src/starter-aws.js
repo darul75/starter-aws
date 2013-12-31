@@ -61,7 +61,7 @@ StarterAws.prototype.init = function() {
 // INIT FOR APPLICATION WITH CREDENTIALS
 StarterAws.prototype.initCredentials = function(options) {
   
-  if (!options.accessKeyId || !options.secretAccessKey || !options.region || !options.instancesId)
+  if (!options.accessKeyId || !options.secretAccessKey || !options.region || !options.instancesId)
     return next(new Error("missing parameters: <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-instancesId>"));
 
   // override defaults with passed in options
@@ -75,7 +75,7 @@ StarterAws.prototype.starter = function(next) {
 
   console.log('----- call starter  ----- ');
   
-  if (!this.options.accessKeyId || !this.options.secretAccessKey || !this.options.region || !this.options.instancesId || !this.options.state)
+  if (!this.options.accessKeyId || !this.options.secretAccessKey || !this.options.region || !this.options.instancesId || !this.options.state)
     return next(new Error("missing parameters: <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-instancesId> <state>"));
   
   console.log('----- instances state forced to  : ' + this.options.state);
@@ -115,7 +115,7 @@ StarterAws.prototype.daemon = function(next) {
   
   console.log('----- starting daemon');
 
-  if (!this.options.accessKeyId || !this.options.secretAccessKey || !this.options.region) {
+  if (!this.options.accessKeyId || !this.options.secretAccessKey || !this.options.region) {
     return next(new Error("missing parameters: <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region>"));
   }
 
