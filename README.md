@@ -39,6 +39,9 @@ starterAws.initCredentials({
     'instancesId' : ''
 });
 
+
+OR
+
 // API INIT CREDENTIALS FROM FILE credentials.json in root module folder
 starterAws.initFileCredentials();
 
