@@ -38,8 +38,7 @@ starterAws.initCredentials({
     'accessKeyId': '',
     'secretAccessKey': '',
     'region': '',
-    'instancesId' : '',
-    'state': ''
+    'instancesId' : ''
 });
 
 or
