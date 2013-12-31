@@ -33,52 +33,38 @@ node starter-aws.js <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-in
 ```javascript
 var starterAws = require('starter-aws');
 
-// THIS CALL IS MADE BY DEFAULT, options attributes have to be set, with by state start or stop...
-starterAws.starter(
-  {
-    accessKeyId: '', 
-    secretAccessKey:'', 
-    region: '', 
-    instancesId: '',
-    state: ''    
-  }, 
-  function(err, status) {
-  // process err
-  
-  }
-);
+// API INIT CREDENTIALS
+starterAws.initCredentials({
+    'accessKeyId': '',
+    'secretAccessKey': '',
+    'region': '',
+    'instancesId' : '',
+    'state': ''
+});
 
 or
 
-// OTHER CALL here a start
-starterAws.start(
-  {
-    accessKeyId: '', secretAccessKey:'', region: '', instancesId: ''
-  }, 
-  function(err, status) {}
-);
+// API START INSTANCE(S)
+starterAws.start(function(err, status) {
+ // status 'ok' when done 
+});
 
-or
+// API STOP INSTANCE(S)
+starterAws.stop(function(err, status) {
+ // status 'ok' when done 
+});
 
-// OTHER CALL here a stop
-starterAws.stop(
-  {
-    accessKeyId: '', secretAccessKey:'', region: '', instancesId: ''
-  }, 
-  function(err, status) {}
-);
+// API REBOOT INSTANCE(S)
+starterAws.reboot(function(err, status) {
+ // status 'ok' when done 
+});
 
-or
+// API STARTING DAEMON INSTANCE(S) status
+starterAws.daemon(function(err, status) {
+ // status 'ok' when done 
+});
 
-// OTHER CALL here a reboot
-starterAws.reboot(
-  {
-    accessKeyId: '', secretAccessKey:'', region: '', instancesId: ''
-  }, 
-  function(err, status) {}
-);
-
-// OTHER CALL here a to get status
+// API GET INSTANCE(S) STATUS
 starterAws.status(function(err, status) {
 
 // status my return:
@@ -99,7 +85,7 @@ starterAws.status(function(err, status) {
 * `accessKeyId` AWS accessKeyId
 * `secretAccessKey` AWS secretAccessKey
 * `region` AWS region
-* `instancesId` AWS instance(s) id, ',' separtor if multi, exemple: i-53613f50,i-53613f30,i-53613f20
+* `instancesId` AWS instance(s) id, ',' separtor if multi, example: i-53613f50,i-53613f30,i-53613f20
 * `state` string state to force, enum values are 'start', 'stop', 'reboot'
         
 ## Return    
