@@ -39,6 +39,10 @@ starterAws.initCredentials({
     'instancesId' : ''
 });
 
+// API INIT CREDENTIALS FROM FILE credentials.json in root module folder
+starterAws.initFileCredentials();
+
+
 // API START INSTANCE(S)
 starterAws.start(function(err, status) {
  // status 'ok' when done 
@@ -54,10 +58,14 @@ starterAws.reboot(function(err, status) {
  // status 'ok' when done 
 });
 
-// API STARTING DAEMON INSTANCE(S) status
+// API STARTING DAEMON INSTANCE(S) : fetch instances status and cache it.
 starterAws.daemon(function(err, status) {
  // status 'ok' when done 
 });
+
+// API STOPPING DAEMON INSTANCE(S) status
+starterAws.daemonStop();
+
 
 // API GET INSTANCE(S) STATUS
 starterAws.status(function(err, status) {
