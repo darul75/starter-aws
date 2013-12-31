@@ -62,7 +62,7 @@ StarterAws.prototype.init = function() {
 StarterAws.prototype.initCredentials = function(options) {
   
   if (!options.accessKeyId || !options.secretAccessKey || !options.region || !options.instancesId)
-    return next(new Error("missing parameters: <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-instancesId> <state>"));
+    return next(new Error("missing parameters: <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-instancesId>"));
 
   // override defaults with passed in options
     f.extend(this.options, options);   
