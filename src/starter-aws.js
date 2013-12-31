@@ -26,13 +26,13 @@ function StarterAws() {
   });
 
   // SMALL DAEMON CHECK STATUS
-  this.daemon(function(err, status){    
-    if (err) console.log(err);
-    else {
-      if (this_.options.debug)
-        console.log(status);
-    }
-  });
+  // this.daemon(function(err, status){    
+  //   if (err) console.log(err);
+  //   else {
+  //     if (this_.options.debug)
+  //       console.log(status);
+  //   }
+  // });
 }
 
 // INIT FOR COMMAND LINE ARGS
