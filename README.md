@@ -41,8 +41,6 @@ starterAws.initCredentials({
     'instancesId' : ''
 });
 
-or
-
 // API START INSTANCE(S)
 starterAws.start(function(err, status) {
  // status 'ok' when done 
