@@ -7,34 +7,40 @@ var AWS = require('aws-sdk');
 
 function StarterAws() {
 
-  this.options = {};
+  this.options = { 
+    debug: true 
+  };
   this.instancesState = [];
   this.init();
-  this.ec2 = new AWS.EC2(this.options);    
+  this.ec2 = new AWS.EC2(this.options);  
 
-  this.starter(this.options, function(err, status){    
-    if (err)
-      console.log(err);
-    else
-      console.log(status);
+  var this_ = this;  
+
+  // FIRST CALL UPDATE STATE
+  this.starter(function(err, status){    
+    if (err) console.log(err);
+    else {
+      if (this_.options.debug)
+        console.log(status);
+    }
   });
 
-  this.daemon(this.options, function(err, status){    
-    if (err)
-      console.log(err);
-    else
-      console.log(status);
+  // SMALL DAEMON CHECK STATUS
+  this.daemon(function(err, status){    
+    if (err) console.log(err);
+    else {
+      if (this_.options.debug)
+        console.log(status);
+    }
   });
 }
 
+// INIT FOR COMMAND LINE ARGS
 StarterAws.prototype.init = function() {
   
   var args = process.argv.splice(2);
 
-  if (args.length < 5) {
-    process.argv = process.argv.concat(args);
-    return;
-  }
+  if (args.length < 5) { process.argv = process.argv.concat(args); return; }
 
   args.forEach(function (val, index, array) {
     console.log(index + ': ' + val);
@@ -44,7 +50,7 @@ StarterAws.prototype.init = function() {
   this.options.accessKeyId = args[0];
   this.options.secretAccessKey = args[1];
   this.options.region = args[2];
-  this.options.instancesId = args[3].split(',');
+  this.options.instancesId = args[3];
   this.options.state = args[4];
 
   process.argv = process.argv.concat(args);
@@ -52,86 +58,64 @@ StarterAws.prototype.init = function() {
   return this;
 };
 
-StarterAws.prototype.starter = function(options, next) {
+// INIT FOR APPLICATION WITH CREDENTIALS
+StarterAws.prototype.initCredentials = function(options) {
   
-  if (!options.accessKeyId || !options.secretAccessKey || !options.region || !options.instancesId || !options.state)
+  if (!options.accessKeyId || !options.secretAccessKey || !options.region || !options.instancesId)
+    return next(new Error("missing parameters: <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-instancesId> <state>"));
+
+  // override defaults with passed in options
+    f.extend(this.options, options);   
+  this.ec2 = new AWS.EC2(this.options);
+
+  return this;
+};
+
+StarterAws.prototype.starter = function(next) {
+
+  console.log('----- call starter  ----- ');
+  
+  if (!this.options.accessKeyId || !this.options.secretAccessKey || !this.options.region || !this.options.instancesId || !this.options.state)
     return next(new Error("missing parameters: <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-instancesId> <state>"));
   
-  console.log('----- instances state forced to  : ' + options.state);
-
-  this.ec2 = new AWS.EC2(options);
+  console.log('----- instances state forced to  : ' + this.options.state);
 
   var fn;
-  switch(options.state) {    
+  switch(this.options.state) {    
     case 'stop':
       fn = this.ec2.stopInstances;
     break;
     case 'reboot':
-      fn = this.ec2.rebootInstances;      
+      fn = this.ec2.rebootInstances;
     break;
     default:
       fn = this.ec2.startInstances;
     break;
   }  
 
-  fn.apply(this.ec2, paramsFunctions(options, next));
+  fn.apply(this.ec2, paramsFunctions(this.options, next));
 
   return this;
 };
 
-StarterAws.prototype.start = function(options, next) {
+StarterAws.prototype.start = function(next) { this.options.state = 'start'; this.starter(next); return this; };
 
-  if (!options.accessKeyId || !options.secretAccessKey || !options.region || !options.instancesId)
-    return next(new Error("missing parameters: <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-instancesId>"));
-  
-  console.log('----- starting aws instance(s) ');
+StarterAws.prototype.stop = function(next) { this.options.state = 'stop'; this.starter(next); return this; };
 
-  this.ec2 = new AWS.EC2(options);
-
-  this.ec2.startInstances.apply(this.ec2, paramsFunctions(options, next));
-
-  return this;
-};
-
-StarterAws.prototype.stop = function(options, next) {
-
-  if (!options.accessKeyId || !options.secretAccessKey || !options.region || !options.instancesId)
-    return next(new Error("missing parameters: <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-instancesId>"));
-  
-  console.log('----- stopping aws instance(s) ');
-
-  this.ec2 = new AWS.EC2(options);
-
-  this.ec2.stopInstances.apply(this.ec2, paramsFunctions(options, next));
-
-  return this;
-};
-
-StarterAws.prototype.reboot = function(options, next) {
-
-  if (!options.accessKeyId || !options.secretAccessKey || !options.region || !options.instancesId)
-    return next(new Error("missing parameters: <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region> <AWS-instancesId>"));
-  
-  console.log('----- reboot aws instance(s) ');
-
-  this.ec2 = new AWS.EC2(options);
-
-  this.ec2.rebootInstances.apply(this.ec2, paramsFunctions(options, next));
-
-  return this;
-};
+StarterAws.prototype.reboot = function(next) { this.options.state = 'reboot'; this.starter(next); return this; };
 
 StarterAws.prototype.status = function(next) {
   
-  console.log('----- status aws instance(s) ');  
+  console.log('----- status aws instance(s) ');
 
   return next(null, this.instancesState);
 };
 
-
-StarterAws.prototype.daemon = function(options, next) {
+StarterAws.prototype.daemon = function(next) {
   
-  if (!options.accessKeyId || !options.secretAccessKey || !options.region) {    
+  console.log('----- starting daemon');
+
+  if (!this.options.accessKeyId || !this.options.secretAccessKey || !this.options.region) {
     return next(new Error("missing parameters: <AWS-accessKeyId> <AWS-secretAccessKey> <AWS-region>"));
   }
 
@@ -140,7 +124,7 @@ StarterAws.prototype.daemon = function(options, next) {
     console.log('----- getting aws info ');
     this_.ec2.describeInstances({}, function(err, data) {
       if (err) {
-        console.log(err);
+        console.log('--- daemon stopped because of :' + err);
         clearInterval(timeoutId);
         return next(err);
       }      
@@ -148,13 +132,9 @@ StarterAws.prototype.daemon = function(options, next) {
       var reservations = data.Reservations;
       this_.instancesState = [];
 
-      var i = 0;
-
       reservations.forEach(function (val, index, array) {
         var reservation = val;
         reservation.Instances.forEach(function (val, index, array) {        
-          
-          var state = val.State;
 
           this_.instancesState.push({
             InstanceId: val.InstanceId,
@@ -164,8 +144,6 @@ StarterAws.prototype.daemon = function(options, next) {
           });          
         });              
       });
-
-      i++;      
 
       return next(null, this_.instancesState);
     });
@@ -183,6 +161,19 @@ var paramsFunctions = function(options, cb) {
     
     return cb(null, 'ok');
   }];
+};
+
+// overriding for the functions
+var f = {
+
+    extend: function(target, source) {
+        if (!source || typeof source === 'function') {
+            return target;
+        }
+        
+        for (var attr in source) { target[attr] = source[attr]; }
+            return target;
+    }
 };
 
 /**
