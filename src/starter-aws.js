@@ -147,7 +147,7 @@ StarterAws.prototype.daemon = function(next) {
 
       return next(null, this_.instancesState);
     });
-  }, 3000);
+  }, 60000);
 
   return this;
 };
